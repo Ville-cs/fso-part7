@@ -4,9 +4,10 @@ import BlogList from "./components/BlogList"
 import Blog from "./components/Blog"
 import BlogForm from "./components/BlogForm"
 import Login from "./components/Login"
+import ErrorBoundary from "./components/ErrorBoundary"
+
 import blogService from "./services/blogs"
 import loginService from "./services/login"
-// import "./styles.css"
 import { Container, AppBar, Toolbar, Button, Typography } from "@mui/material"
 
 const App = () => {
@@ -151,40 +152,42 @@ const App = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Routes>
-        <Route
-          path="/"
-          element={<BlogList blogs={blogs} notification={notification} />}
-        />
-        <Route
-          path="/:id"
-          element={
-            <Blog
-              blog={blog}
-              user={user}
-              deleteBlog={deleteBlog}
-              addLike={addLike}
-            />
-          }
-        />
-        <Route
-          path="/new"
-          element={<BlogForm handleBlogPost={handleBlogPost} />}
-        />
-        <Route
-          path="/login"
-          element={
-            <Login
-              notification={notification}
-              handleLogin={handleLogin}
-              username={username}
-              password={password}
-              setUsername={setUsername}
-              setPassword={setPassword}
-            />
-          }
-        />
-      </Routes>
+      <ErrorBoundary>
+        <Routes>
+          <Route
+            path="/"
+            element={<BlogList blogs={blogs} notification={notification} />}
+          />
+          <Route
+            path="/:id"
+            element={
+              <Blog
+                blog={blog}
+                user={user}
+                deleteBlog={deleteBlog}
+                addLike={addLike}
+              />
+            }
+          />
+          <Route
+            path="/new"
+            element={<BlogForm handleBlogPost={handleBlogPost} />}
+          />
+          <Route
+            path="/login"
+            element={
+              <Login
+                notification={notification}
+                handleLogin={handleLogin}
+                username={username}
+                password={password}
+                setUsername={setUsername}
+                setPassword={setPassword}
+              />
+            }
+          />
+        </Routes>
+      </ErrorBoundary>
     </Container>
   )
 }
