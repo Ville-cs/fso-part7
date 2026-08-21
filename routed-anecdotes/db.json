@@ -13,34 +13,6 @@
       "info": "http://wiki.c2.com/?PrematureOptimization",
       "votes": 0,
       "id": "2"
-    },
-    {
-      "content": "adadssa",
-      "author": "asdasdad",
-      "info": "asdasdads",
-      "votes": 0,
-      "id": "qdPEYmbYToo"
-    },
-    {
-      "content": "asd",
-      "author": "asd",
-      "info": "asd",
-      "votes": 0,
-      "id": "MvNpS2B40_k"
-    },
-    {
-      "content": "asd",
-      "author": "asd",
-      "info": "asdasdasdasdasd",
-      "votes": 0,
-      "id": "nKDD7krnlWo"
-    },
-    {
-      "content": "new",
-      "author": "new",
-      "info": "new",
-      "votes": 0,
-      "id": "_my4MlyVaFI"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
