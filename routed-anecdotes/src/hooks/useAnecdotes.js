@@ -8,5 +8,11 @@ export const useAnecdotes = () => {
     anecdoteService.getAll().then(setAnecdotes)
   }, [])
 
-  return [anecdotes, setAnecdotes]
+  const addAnecdote = async (content) => {
+    const res = await anecdoteService.createNew(content)
+    setAnecdotes([...anecdotes, res])
+    return res
+  }
+
+  return { anecdotes, addAnecdote }
 }
