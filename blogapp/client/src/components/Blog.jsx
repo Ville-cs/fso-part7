@@ -14,6 +14,7 @@ const Blog = ({ blog, user }) => {
   const { like, remove } = useBlogsActions()
   const { setNotification } = useNotificationActions()
 
+  // exercise 7-13
   const handleLike = () => {
     const blogObject = {
       title: blog.title,
