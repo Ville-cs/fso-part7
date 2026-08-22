@@ -2,7 +2,7 @@ import { TextField, Button } from "@mui/material"
 import loginService from "../services/login"
 import blogService from "../services/blogs"
 import { useNavigate } from "react-router-dom"
-import { useNotificationActions } from "../notificationStore"
+import { useNotificationActions } from "../stores/notificationStore"
 
 const LoginForm = ({
   setUser,

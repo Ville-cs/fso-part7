@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom"
 import { Card } from "@mui/material"
+import { useBlogs } from "../stores/blogStore"
 
-const BlogList = ({ blogs }) => {
+const BlogList = () => {
+  const blogs = useBlogs()
   return (
     <div>
       <h2>Blogs</h2>

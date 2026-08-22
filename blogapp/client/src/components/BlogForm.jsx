@@ -1,11 +1,12 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { TextField, Button, Typography } from "@mui/material"
-import { useNotificationActions } from "../notificationStore"
-import blogService from "../services/blogs"
+import { useNotificationActions } from "../stores/notificationStore"
+import { useBlogsActions } from "../stores/blogStore"
 
-const BlogForm = ({ blogs, renderBlog, setBlogs, setRenderBlog }) => {
+const BlogForm = () => {
   const { setNotification } = useNotificationActions()
+  const { add } = useBlogsActions()
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [url, setUrl] = useState("")
@@ -31,9 +32,7 @@ const BlogForm = ({ blogs, renderBlog, setBlogs, setRenderBlog }) => {
         author: author,
         url: url,
       }
-      const postedBlog = await blogService.create(newBlog)
-      setBlogs(blogs.concat(postedBlog))
-      setRenderBlog(!renderBlog)
+      add(newBlog)
       setNotification({
         message: `Added new blog: ${title} by ${author}`,
         type: "success",

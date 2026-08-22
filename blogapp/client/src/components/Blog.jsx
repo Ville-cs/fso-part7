@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom"
+import { useBlogsActions } from "../stores/blogStore"
+import { useNotificationActions } from "../stores/notificationStore"
 import {
   Card,
   CardHeader,
@@ -7,8 +9,10 @@ import {
   Button,
 } from "@mui/material"
 
-const Blog = ({ blog, addLike, user, deleteBlog }) => {
+const Blog = ({ blog, user }) => {
   const navigate = useNavigate()
+  const { like, remove } = useBlogsActions()
+  const { setNotification } = useNotificationActions()
 
   const handleLike = () => {
     const blogObject = {
@@ -17,13 +21,15 @@ const Blog = ({ blog, addLike, user, deleteBlog }) => {
       url: blog.url,
       likes: blog.likes + 1,
     }
-    addLike(blog, blogObject)
+    like(blog.id, blogObject)
+    setNotification({ message: "Liked blog", type: "success" })
   }
 
   const handleRemove = () => {
     if (window.confirm(`Remove blog: ${blog.title} by ${blog.author}`)) {
-      deleteBlog(blog)
-      navigate("/")
+      remove(blog.id)
+      setNotification({ message: "Blog deleted", type: "success" })
+      navigate("/blogs")
     }
   }
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { Routes, Route, Link, useNavigate, useMatch } from "react-router-dom"
-import { useNotificationActions } from "./notificationStore"
+import { useBlogs } from "./stores/blogStore"
+import { useBlogsActions } from "./stores/blogStore"
 import Home from "./components/Home"
 import BlogList from "./components/BlogList"
 import Blog from "./components/Blog"
@@ -9,18 +10,20 @@ import Login from "./components/Login"
 import ErrorBoundary from "./components/ErrorBoundary"
 import NotFound from "./components/NotFound"
 import Notification from "./components/Notification"
-
 import blogService from "./services/blogs"
 import { Container, AppBar, Toolbar, Button, Typography } from "@mui/material"
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const blogs = useBlogs()
+  const { initialize } = useBlogsActions()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
-  const [renderBlog, setRenderBlog] = useState(false)
   const navigate = useNavigate()
-  const { setNotification } = useNotificationActions()
+
+  useEffect(() => {
+    initialize()
+  }, [initialize])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser")
@@ -31,29 +34,10 @@ const App = () => {
     }
   }, [])
 
-  useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      blogs.sort((a, b) => b.likes - a.likes)
-      setBlogs(blogs)
-    })
-  }, [renderBlog])
-
   const handleLogout = () => {
     window.localStorage.removeItem("loggedBlogappUser")
     setUser(null)
     navigate("/")
-  }
-
-  const deleteBlog = async (blog) => {
-    await blogService.remove(blog.id)
-    setRenderBlog(!renderBlog)
-    setNotification({ message: "Blog deleted", type: "success" })
-  }
-
-  const addLike = async (blog, blogObject) => {
-    await blogService.update(blog.id, blogObject)
-    setRenderBlog(!renderBlog)
-    setNotification({ message: "Liked blog", type: "success" })
   }
 
   const match = useMatch("/blogs/:id")
@@ -109,29 +93,9 @@ const App = () => {
       <ErrorBoundary>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/blogs" element={<BlogList blogs={blogs} />} />
-          <Route
-            path="/blogs/:id"
-            element={
-              <Blog
-                blog={blog}
-                user={user}
-                deleteBlog={deleteBlog}
-                addLike={addLike}
-              />
-            }
-          />
-          <Route
-            path="/new"
-            element={
-              <BlogForm
-                blog={blog}
-                renderBlog={renderBlog}
-                setBlogs={blog}
-                setRenderBlog={blog}
-              />
-            }
-          />
+          <Route path="/blogs" element={<BlogList />} />
+          <Route path="/blogs/:id" element={<Blog blog={blog} user={user} />} />
+          <Route path="/new" element={<BlogForm blog={blog} />} />
           <Route
             path="/login"
             element={
