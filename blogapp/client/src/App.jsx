@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react"
 import { Routes, Route, Link, useNavigate, useMatch } from "react-router-dom"
+import Home from "./components/Home"
 import BlogList from "./components/BlogList"
 import Blog from "./components/Blog"
 import BlogForm from "./components/BlogForm"
 import Login from "./components/Login"
 import ErrorBoundary from "./components/ErrorBoundary"
+import NotFound from "./components/NotFound"
 
 import blogService from "./services/blogs"
 import loginService from "./services/login"
@@ -106,7 +108,7 @@ const App = () => {
     }, 5000)
   }
 
-  const match = useMatch("/:id")
+  const match = useMatch("/blogs/:id")
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
 
   const style = { "&:hover": { bgcolor: "rgba(255,255,255,0.3)" } }
@@ -127,6 +129,9 @@ const App = () => {
               Blog App
             </Typography>
             <Button color="inherit" component={Link} to="/" sx={style}>
+              home
+            </Button>
+            <Button color="inherit" component={Link} to="/blogs" sx={style}>
               blogs
             </Button>
             {user ? (
@@ -154,12 +159,13 @@ const App = () => {
       </AppBar>
       <ErrorBoundary>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route
-            path="/"
+            path="/blogs"
             element={<BlogList blogs={blogs} notification={notification} />}
           />
           <Route
-            path="/:id"
+            path="/blogs/:id"
             element={
               <Blog
                 blog={blog}
@@ -186,6 +192,7 @@ const App = () => {
               />
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </ErrorBoundary>
     </Container>

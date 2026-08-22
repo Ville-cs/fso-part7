@@ -9,7 +9,7 @@ const BlogList = ({ blogs, notification }) => {
       <Notification notification={notification} />
       {blogs.map((blog) => (
         <Card key={blog.id} sx={{ marginTop: "2em" }}>
-          <Link to={`/${blog.id}`}>
+          <Link to={`/blogs/${blog.id}`}>
             {blog.title} by {blog.author}
           </Link>
         </Card>
