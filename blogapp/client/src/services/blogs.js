@@ -13,12 +13,15 @@ const getAll = async () => {
 }
 
 const create = async (newObject) => {
-  const config = {
-    headers: { Authorization: token },
+  try {
+    const config = {
+      headers: { Authorization: token },
+    }
+    const response = await axios.post(baseUrl, newObject, config)
+    return response.data
+  } catch (error) {
+    throw new Error(error.message)
   }
-
-  const response = await axios.post(baseUrl, newObject, config)
-  return response.data
 }
 
 const update = async (id, newObject) => {

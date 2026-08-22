@@ -1,12 +1,40 @@
 import { TextField, Button } from "@mui/material"
+import loginService from "../services/login"
+import blogService from "../services/blogs"
+import { useNavigate } from "react-router-dom"
+import { useNotificationActions } from "../notificationStore"
 
 const LoginForm = ({
-  handleLogin,
+  setUser,
   username,
   password,
   setUsername,
   setPassword,
 }) => {
+  const navigate = useNavigate()
+  const { setNotification } = useNotificationActions()
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+
+    try {
+      const user = await loginService.login({
+        username,
+        password,
+      })
+      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user))
+      blogService.setToken(user.token)
+      setUser(user)
+      setUsername("")
+      setPassword("")
+      navigate("/")
+      setNotification({ message: "Login successful", type: "success" })
+    } catch (error) {
+      console.log(error.message)
+      setNotification({ message: "Username or password wrong", type: "error" })
+    }
+  }
+
   return (
     <form onSubmit={handleLogin}>
       <div>

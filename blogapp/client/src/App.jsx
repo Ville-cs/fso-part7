@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { Routes, Route, Link, useNavigate, useMatch } from "react-router-dom"
+import { useNotificationActions } from "./notificationStore"
 import Home from "./components/Home"
 import BlogList from "./components/BlogList"
 import Blog from "./components/Blog"
@@ -7,9 +8,9 @@ import BlogForm from "./components/BlogForm"
 import Login from "./components/Login"
 import ErrorBoundary from "./components/ErrorBoundary"
 import NotFound from "./components/NotFound"
+import Notification from "./components/Notification"
 
 import blogService from "./services/blogs"
-import loginService from "./services/login"
 import { Container, AppBar, Toolbar, Button, Typography } from "@mui/material"
 
 const App = () => {
@@ -17,9 +18,9 @@ const App = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
   const [renderBlog, setRenderBlog] = useState(false)
   const navigate = useNavigate()
+  const { setNotification } = useNotificationActions()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser")
@@ -37,73 +38,22 @@ const App = () => {
     })
   }, [renderBlog])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
-      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
-      setUsername("")
-      setPassword("")
-      navigate("/")
-      setNotification({ message: "Login successful", type: "success" })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
-    } catch (error) {
-      console.log(error.message)
-      setNotification({ message: "Username or password wrong", type: "error" })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
-    }
-  }
-
   const handleLogout = () => {
     window.localStorage.removeItem("loggedBlogappUser")
     setUser(null)
     navigate("/")
   }
 
-  const handleBlogPost = async (object) => {
-    try {
-      const postedBlog = await blogService.create(object)
-      setBlogs(blogs.concat(postedBlog))
-      setRenderBlog(!renderBlog)
-      setNotification({ message: "Blog submitted", type: "success" })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
-    } catch (error) {
-      console.log(error.message)
-      setNotification({ message: "Some fields missing", type: "error" })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
-    }
-  }
-
   const deleteBlog = async (blog) => {
     await blogService.remove(blog.id)
     setRenderBlog(!renderBlog)
-    setNotification({ message: "Blog deleted!", type: "success" })
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
+    setNotification({ message: "Blog deleted", type: "success" })
   }
 
   const addLike = async (blog, blogObject) => {
     await blogService.update(blog.id, blogObject)
     setRenderBlog(!renderBlog)
     setNotification({ message: "Liked blog", type: "success" })
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
   }
 
   const match = useMatch("/blogs/:id")
@@ -155,13 +105,11 @@ const App = () => {
           </Toolbar>
         </Container>
       </AppBar>
+      <Notification />
       <ErrorBoundary>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route
-            path="/blogs"
-            element={<BlogList blogs={blogs} notification={notification} />}
-          />
+          <Route path="/blogs" element={<BlogList blogs={blogs} />} />
           <Route
             path="/blogs/:id"
             element={
@@ -175,14 +123,20 @@ const App = () => {
           />
           <Route
             path="/new"
-            element={<BlogForm handleBlogPost={handleBlogPost} />}
+            element={
+              <BlogForm
+                blog={blog}
+                renderBlog={renderBlog}
+                setBlogs={blog}
+                setRenderBlog={blog}
+              />
+            }
           />
           <Route
             path="/login"
             element={
               <Login
-                notification={notification}
-                handleLogin={handleLogin}
+                setUser={setUser}
                 username={username}
                 password={password}
                 setUsername={setUsername}
