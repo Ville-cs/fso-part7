@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import { Routes, Route, Link, useNavigate, useMatch } from "react-router-dom"
 import { useBlogs } from "./stores/blogStore"
 import { useUser } from "./stores/userStore"
 import { useBlogsActions } from "./stores/blogStore"
 import { useUserActions } from "./stores/userStore"
+import useLocalStorage from "./services/persistentUser"
 import Home from "./components/Home"
 import BlogList from "./components/BlogList"
 import Blog from "./components/Blog"
@@ -20,9 +21,7 @@ const App = () => {
   const user = useUser()
   const { initialize } = useBlogsActions()
   const { save, remove } = useUserActions()
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  // const [user, setUser] = useState(null)
+  const { getUser, removeUser } = useLocalStorage()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -30,17 +29,15 @@ const App = () => {
   }, [initialize])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser")
-    if (loggedUserJSON) {
-      const loggedUser = JSON.parse(loggedUserJSON)
+    const loggedUser = getUser
+    if (loggedUser) {
       save(loggedUser)
       blogService.setToken(loggedUser.token)
     }
-  }, [save])
+  }, [save, getUser])
 
   const handleLogout = () => {
-    window.localStorage.removeItem("loggedBlogappUser")
-    // setUser(null)
+    removeUser()
     remove()
     navigate("/")
   }
@@ -101,17 +98,7 @@ const App = () => {
           <Route path="/blogs" element={<BlogList />} />
           <Route path="/blogs/:id" element={<Blog blog={blog} user={user} />} />
           <Route path="/new" element={<BlogForm blog={blog} />} />
-          <Route
-            path="/login"
-            element={
-              <Login
-                username={username}
-                password={password}
-                setUsername={setUsername}
-                setPassword={setPassword}
-              />
-            }
-          />
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </ErrorBoundary>

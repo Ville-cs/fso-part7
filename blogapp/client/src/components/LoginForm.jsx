@@ -1,13 +1,18 @@
+import { useState } from "react"
 import { TextField, Button } from "@mui/material"
 import blogService from "../services/blogs"
 import { useNavigate } from "react-router-dom"
 import { useNotificationActions } from "../stores/notificationStore"
 import { useUserActions } from "../stores/userStore"
+import useLocalStorage from "../services/persistentUser"
 
-const LoginForm = ({ username, password, setUsername, setPassword }) => {
+const LoginForm = () => {
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
   const navigate = useNavigate()
   const { setNotification } = useNotificationActions()
   const { save, login } = useUserActions()
+  const { saveUser } = useLocalStorage()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -16,7 +21,7 @@ const LoginForm = ({ username, password, setUsername, setPassword }) => {
         username,
         password,
       })
-      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user))
+      saveUser(user)
       blogService.setToken(user.token)
       save(user)
       setUsername("")
