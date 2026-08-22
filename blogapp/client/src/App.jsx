@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react"
 import { Routes, Route, Link, useNavigate, useMatch } from "react-router-dom"
 import { useBlogs } from "./stores/blogStore"
+import { useUser } from "./stores/userStore"
 import { useBlogsActions } from "./stores/blogStore"
+import { useUserActions } from "./stores/userStore"
 import Home from "./components/Home"
 import BlogList from "./components/BlogList"
 import Blog from "./components/Blog"
@@ -15,10 +17,12 @@ import { Container, AppBar, Toolbar, Button, Typography } from "@mui/material"
 
 const App = () => {
   const blogs = useBlogs()
+  const user = useUser()
   const { initialize } = useBlogsActions()
+  const { save, remove } = useUserActions()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [user, setUser] = useState(null)
+  // const [user, setUser] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -28,15 +32,16 @@ const App = () => {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser")
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+      const loggedUser = JSON.parse(loggedUserJSON)
+      save(loggedUser)
+      blogService.setToken(loggedUser.token)
     }
-  }, [])
+  }, [save])
 
   const handleLogout = () => {
     window.localStorage.removeItem("loggedBlogappUser")
-    setUser(null)
+    // setUser(null)
+    remove()
     navigate("/")
   }
 
@@ -100,7 +105,6 @@ const App = () => {
             path="/login"
             element={
               <Login
-                setUser={setUser}
                 username={username}
                 password={password}
                 setUsername={setUsername}

@@ -1,30 +1,24 @@
 import { TextField, Button } from "@mui/material"
-import loginService from "../services/login"
 import blogService from "../services/blogs"
 import { useNavigate } from "react-router-dom"
 import { useNotificationActions } from "../stores/notificationStore"
+import { useUserActions } from "../stores/userStore"
 
-const LoginForm = ({
-  setUser,
-  username,
-  password,
-  setUsername,
-  setPassword,
-}) => {
+const LoginForm = ({ username, password, setUsername, setPassword }) => {
   const navigate = useNavigate()
   const { setNotification } = useNotificationActions()
+  const { save, login } = useUserActions()
 
   const handleLogin = async (event) => {
     event.preventDefault()
-
     try {
-      const user = await loginService.login({
+      const user = await login({
         username,
         password,
       })
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user))
       blogService.setToken(user.token)
-      setUser(user)
+      save(user)
       setUsername("")
       setPassword("")
       navigate("/")

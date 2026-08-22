@@ -14,7 +14,6 @@ const Blog = ({ blog, user }) => {
   const { like, remove } = useBlogsActions()
   const { setNotification } = useNotificationActions()
 
-  // exercise 7-13
   const handleLike = () => {
     const blogObject = {
       title: blog.title,
@@ -66,7 +65,7 @@ const Blog = ({ blog, user }) => {
               </Button>
             )}
           </div>
-          {user && user.id === blog.user.id ? (
+          {(user && user.id === blog.user.id) || user.id === blog.user ? (
             <Button
               variant="contained"
               color="error"
