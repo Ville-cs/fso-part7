@@ -18,8 +18,6 @@ const App = () => {
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState(null)
-  // const [message, setMessage] = useState("")
-  // const [errorMessage, setErrorMessage] = useState("")
   const [renderBlog, setRenderBlog] = useState(false)
   const navigate = useNavigate()
 
