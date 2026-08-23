@@ -17,7 +17,7 @@ const useBlogsStore = create((set) => ({
       const added = await blogsService.create(blog)
       set((state) => ({ blogs: [...state.blogs, added] }))
     },
-    like: async (id, blog) => {
+    update: async (id, blog) => {
       const updatedBlog = await blogsService.update(id, blog)
       set((state) => ({
         blogs: state.blogs.map((b) => (b.id === id ? updatedBlog : b)),

@@ -15,7 +15,7 @@ const Blog = ({ user }) => {
   const blog = useBlog()
   const { id } = useParams()
   const navigate = useNavigate()
-  const { like, remove, fetchBlog } = useBlogsActions()
+  const { update, remove, fetchBlog } = useBlogsActions()
   const { setNotification } = useNotificationActions()
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const Blog = ({ user }) => {
       url: blog.url,
       likes: blog.likes + 1,
     }
-    like(blog.id, blogObject)
+    update(blog.id, blogObject)
     setNotification({ message: "Liked blog", type: "success" })
   }
 
