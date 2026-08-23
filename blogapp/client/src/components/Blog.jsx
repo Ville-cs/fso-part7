@@ -1,5 +1,6 @@
-import { useNavigate } from "react-router-dom"
-import { useBlogsActions } from "../stores/blogStore"
+import { useEffect } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+import { useBlogsActions, useBlog } from "../stores/blogStore"
 import { useNotificationActions } from "../stores/notificationStore"
 import {
   Card,
@@ -9,10 +10,16 @@ import {
   Button,
 } from "@mui/material"
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ user }) => {
+  const blog = useBlog()
+  const { id } = useParams()
   const navigate = useNavigate()
-  const { like, remove } = useBlogsActions()
+  const { like, remove, fetchBlog } = useBlogsActions()
   const { setNotification } = useNotificationActions()
+
+  useEffect(() => {
+    fetchBlog(id)
+  }, [fetchBlog, id])
 
   const handleLike = () => {
     const blogObject = {
@@ -65,7 +72,7 @@ const Blog = ({ blog, user }) => {
               </Button>
             )}
           </div>
-          {(user && user.id === blog.user.id) || user.id === blog.user ? (
+          {(user && user?.id === blog.user.id) || user?.id === blog.user ? (
             <Button
               variant="contained"
               color="error"

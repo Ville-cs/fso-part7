@@ -1,10 +1,70 @@
-import LoginForm from "./LoginForm"
+import { useState } from "react"
+import { TextField, Button } from "@mui/material"
+import blogService from "../services/blogs"
+import { useNavigate } from "react-router-dom"
+import { useNotificationActions } from "../stores/notificationStore"
+import { useUserActions } from "../stores/userStore"
+import useLocalStorage from "../services/persistentUser"
 
 const Login = () => {
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const navigate = useNavigate()
+  const { setNotification } = useNotificationActions()
+  const { save, login } = useUserActions()
+  const { saveUser } = useLocalStorage()
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    try {
+      const user = await login({
+        username,
+        password,
+      })
+      saveUser(user)
+      blogService.setToken(user.token)
+      save(user)
+      setUsername("")
+      setPassword("")
+      navigate("/")
+      setNotification({ message: "Login successful", type: "success" })
+    } catch (error) {
+      console.log(error.message)
+      setNotification({ message: "Username or password wrong", type: "error" })
+    }
+  }
+
   return (
     <div>
-      <h2>Login to see blogs</h2>
-      <LoginForm />
+      <h2>Login</h2>
+      <form onSubmit={handleLogin}>
+        <div>
+          <TextField
+            label="username"
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
+            variant="standard"
+          />
+        </div>
+        <div>
+          <TextField
+            label="password"
+            value={password}
+            type="password"
+            onChange={({ target }) => setPassword(target.value)}
+            variant="standard"
+          />
+        </div>
+        <Button
+          type="submit"
+          id="login-button"
+          variant="contained"
+          color="success"
+          sx={{ margin: "1em 2em" }}
+        >
+          login
+        </Button>
+      </form>
     </div>
   )
 }

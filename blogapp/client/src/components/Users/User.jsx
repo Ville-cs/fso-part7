@@ -3,7 +3,7 @@ import { useBlogUsersActions, useBlogUser } from "../../stores/blogUserStore"
 import { useParams } from "react-router-dom"
 
 const User = () => {
-  const { id } = useParams("id")
+  const { id } = useParams()
   const { fetchUser } = useBlogUsersActions()
   const user = useBlogUser()
 
