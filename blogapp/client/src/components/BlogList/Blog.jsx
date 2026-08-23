@@ -1,3 +1,4 @@
+import BlogComments from "./BlogComments"
 import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useBlogsActions, useBlog } from "../../stores/blogStore"
@@ -82,6 +83,7 @@ const Blog = ({ user }) => {
               remove
             </Button>
           ) : null}
+          <BlogComments blog={blog} />
         </CardContent>
       </Card>
     </div>
