@@ -52,42 +52,55 @@ const Blog = ({ user }) => {
             "& .MuiCardHeader-title": {
               fontWeight: "bold",
               fontSize: "2rem",
+              textAlign: "center",
             },
           }}
         />
-        <CardContent>
-          <Typography sx={{ marginTop: "1em", fontSize: "25px" }}>
-            by {blog.author}
-          </Typography>
-
-          <Typography sx={{ marginTop: "1em", fontSize: "20px" }}>
-            <a href={blog.url}>{blog.url}</a>
-          </Typography>
-          <div>
-            <Typography sx={{ marginTop: "1em", fontSize: "22px" }}>
-              Likes <span data-testid="likes">{blog.likes}</span>
+        <div style={styles.container}>
+          <CardContent>
+            <Typography sx={{ fontSize: "25px" }}>by {blog.author}</Typography>
+            <Typography sx={{ marginTop: "1em", fontSize: "20px" }}>
+              <a href={blog.url}>{blog.url}</a>
             </Typography>
-            {user && (
-              <Button variant="contained" color="success" onClick={handleLike}>
-                like
+            <div>
+              <Typography sx={{ marginTop: "1em", fontSize: "22px" }}>
+                Likes <span data-testid="likes">{blog.likes}</span>
+              </Typography>
+              {user && (
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={handleLike}
+                >
+                  like
+                </Button>
+              )}
+            </div>
+            {(user && user?.id === blog.user.id) || user?.id === blog.user ? (
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ marginTop: "1em" }}
+                onClick={handleRemove}
+              >
+                remove
               </Button>
-            )}
-          </div>
-          {(user && user?.id === blog.user.id) || user?.id === blog.user ? (
-            <Button
-              variant="contained"
-              color="error"
-              sx={{ marginTop: "1em" }}
-              onClick={handleRemove}
-            >
-              remove
-            </Button>
-          ) : null}
+            ) : null}
+          </CardContent>
           <BlogComments blog={blog} />
-        </CardContent>
+        </div>
       </Card>
     </div>
   )
+}
+
+const styles = {
+  container: {
+    width: "600px",
+    margin: "auto",
+    display: "flex",
+    gap: "10em",
+  },
 }
 
 export default Blog

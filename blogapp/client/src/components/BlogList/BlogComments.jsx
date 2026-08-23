@@ -1,5 +1,6 @@
 import { useField } from "../../hooks/useField"
 import { useBlogsActions } from "../../stores/blogStore"
+import { Card } from "@mui/material"
 
 const BlogComments = ({ blog }) => {
   const { onReset: reset, ...comment } = useField("text")
@@ -20,15 +21,29 @@ const BlogComments = ({ blog }) => {
       <h2>Comments</h2>
       <form onSubmit={handleSubmit}>
         <input {...comment} />
-        <button type="submit">ADD COMMENT</button>
+        <button style={styles.button} type="submit">
+          ADD COMMENT
+        </button>
       </form>
-      <ul>
-        {blog?.comments.map((comment) => (
-          <li key={comment}>{comment}</li>
-        ))}
-      </ul>
+      {blog?.comments.map((comment) => (
+        <Card
+          key={comment}
+          sx={{ marginTop: "1em", marginBottom: "2em", padding: "1em" }}
+        >
+          {comment}
+        </Card>
+      ))}
     </div>
   )
+}
+
+const styles = {
+  button: {
+    backgroundColor: "blue",
+    color: "white",
+    padding: "0.75em",
+    marginLeft: "10px",
+  },
 }
 
 export default BlogComments
