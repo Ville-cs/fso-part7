@@ -13,6 +13,7 @@ import Login from "./components/Login"
 import ErrorBoundary from "./components/ErrorBoundary"
 import NotFound from "./components/NotFound"
 import Notification from "./components/Notification"
+import Users from "./components/Users"
 import blogService from "./services/blogs"
 import { Container, AppBar, Toolbar, Button, Typography } from "@mui/material"
 
@@ -68,6 +69,9 @@ const App = () => {
             <Button color="inherit" component={Link} to="/blogs" sx={style}>
               blogs
             </Button>
+            <Button color="inherit" component={Link} to="/users" sx={style}>
+              users
+            </Button>
             {user ? (
               <span>
                 <Button color="inherit" component={Link} to="/new" sx={style}>
@@ -96,6 +100,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/blogs" element={<BlogList />} />
+          <Route path="/users" element={<Users />} />
           <Route path="/blogs/:id" element={<Blog blog={blog} user={user} />} />
           <Route path="/new" element={<BlogForm blog={blog} />} />
           <Route path="/login" element={<Login />} />
