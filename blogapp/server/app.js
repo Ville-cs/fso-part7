@@ -50,13 +50,7 @@ app.use("/api", middleware.unknownEndpoint)
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/dist")))
-  app.use(express.static("dist"))
-  app.use((req, res, next) => {
-    console.log("REACHED BEFORE CATCH-ALL:", req.method, req.originalUrl)
-    next()
-  })
   app.get("*", (req, res) => {
-    console.log("SPA fallback reached:", req.originalUrl)
     res.sendFile(path.join(__dirname, "../client/dist/index.html"))
   })
 }
