@@ -8,7 +8,7 @@ const BlogList = () => {
     <div>
       <h2>Blogs</h2>
       {blogs.map((blog) => (
-        <Card key={blog.id} sx={{ marginTop: "2em" }}>
+        <Card key={blog.id} sx={{ marginTop: "2em", padding: "1.25em" }}>
           <Link to={`/blogs/${blog.id}`}>
             {blog.title} by {blog.author}
           </Link>

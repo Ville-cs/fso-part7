@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { useBlogUsersActions, useBlogUser } from "../../stores/blogUserStore"
 import { useParams } from "react-router-dom"
+import { Card } from "@mui/material"
 
 const User = () => {
   const { id } = useParams()
@@ -16,11 +17,11 @@ const User = () => {
     <div>
       <h2>{user.name}</h2>
       <h3>Blogs added by this user</h3>
-      <ul>
-        {user.blogs.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
-        ))}
-      </ul>
+      {user.blogs.map((blog) => (
+        <Card key={blog.id} sx={{ marginTop: "2em", padding: "1.25em" }}>
+          {blog.title}
+        </Card>
+      ))}
     </div>
   )
 }
