@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useField } from "../hooks/useField"
+
 import { TextField, Button } from "@mui/material"
 import blogService from "../services/blogs"
 import { useNavigate } from "react-router-dom"
@@ -7,8 +8,9 @@ import { useUserActions } from "../stores/userStore"
 import useLocalStorage from "../services/persistentUser"
 
 const Login = () => {
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+  const { onReset: resetUsername, ...username } = useField("text")
+  const { onReset: resetPassword, ...password } = useField("password")
+
   const navigate = useNavigate()
   const { setNotification } = useNotificationActions()
   const { save, login } = useUserActions()
@@ -18,14 +20,14 @@ const Login = () => {
     event.preventDefault()
     try {
       const user = await login({
-        username,
-        password,
+        username: username.value,
+        password: password.value,
       })
       saveUser(user)
       blogService.setToken(user.token)
       save(user)
-      setUsername("")
-      setPassword("")
+      resetUsername()
+      resetPassword()
       navigate("/")
       setNotification({ message: "Login successful", type: "success" })
     } catch (error) {
@@ -39,21 +41,10 @@ const Login = () => {
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <div>
-          <TextField
-            label="username"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-            variant="standard"
-          />
+          <TextField {...username} label="username" variant="standard" />
         </div>
         <div>
-          <TextField
-            label="password"
-            value={password}
-            type="password"
-            onChange={({ target }) => setPassword(target.value)}
-            variant="standard"
-          />
+          <TextField {...password} label="password" variant="standard" />
         </div>
         <Button
           type="submit"

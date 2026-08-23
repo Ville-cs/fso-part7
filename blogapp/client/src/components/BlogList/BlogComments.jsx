@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { useField } from "../../hooks/useField"
 import { useBlogsActions } from "../../stores/blogStore"
 
 const BlogComments = ({ blog }) => {
-  const [comment, setCommnent] = useState("")
+  const { onReset: reset, ...comment } = useField("text")
   const { update } = useBlogsActions()
 
   const handleSubmit = (event) => {
@@ -10,19 +10,16 @@ const BlogComments = ({ blog }) => {
     const { user, ...oldBlog } = blog
     const newBlog = {
       ...oldBlog,
-      comments: [...oldBlog.comments, comment],
+      comments: [...oldBlog.comments, comment.value],
     }
     update(newBlog.id, newBlog)
+    reset()
   }
   return (
     <div>
       <h2>Comments</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          value={comment}
-          onChange={(e) => setCommnent(e.target.value)}
-          placeholder="add a comment"
-        />
+        <input {...comment} />
         <button type="submit">ADD COMMENT</button>
       </form>
       <ul>
