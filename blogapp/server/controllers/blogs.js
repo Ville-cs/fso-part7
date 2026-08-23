@@ -43,6 +43,13 @@ blogsRouter.post("/", middleware.userExtractor, async (req, res) => {
   res.status(201).json(savedBlog)
 })
 
+blogsRouter.post("/:id/comments", async (req, res) => {
+  const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  })
+  res.status(200).json(updatedBlog)
+})
+
 blogsRouter.delete("/:id", middleware.userExtractor, async (req, res) => {
   const blog = await Blog.findById(req.params.id)
   if (blog.user.toString() !== req.user.id) {
