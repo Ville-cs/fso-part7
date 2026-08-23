@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { Card } from "@mui/material"
-import { useBlogs } from "../stores/blogStore"
+import { useBlogs } from "../../stores/blogStore"
 
 const BlogList = () => {
   const blogs = useBlogs()

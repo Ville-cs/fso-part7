@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { TextField, Button, Typography } from "@mui/material"
-import { useNotificationActions } from "../stores/notificationStore"
-import { useBlogsActions } from "../stores/blogStore"
+import { useNotificationActions } from "../../stores/notificationStore"
+import { useBlogsActions } from "../../stores/blogStore"
 
 const BlogForm = () => {
   const { setNotification } = useNotificationActions()

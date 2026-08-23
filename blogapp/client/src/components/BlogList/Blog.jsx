@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { useBlogsActions, useBlog } from "../stores/blogStore"
-import { useNotificationActions } from "../stores/notificationStore"
+import { useBlogsActions, useBlog } from "../../stores/blogStore"
+import { useNotificationActions } from "../../stores/notificationStore"
 import {
   Card,
   CardHeader,
