@@ -10,4 +10,13 @@ const getAll = async () => {
   }
 }
 
-export default { getAll }
+const getById = async (id) => {
+  try {
+    const response = await axios.get(`${baseUrl}/${id}`)
+    return response.data
+  } catch (error) {
+    throw new Error(error.message)
+  }
+}
+
+export default { getAll, getById }

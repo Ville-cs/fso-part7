@@ -1,7 +1,7 @@
-import User from "./User"
 import { useEffect } from "react"
 import { useBlogUsersActions } from "../../stores/blogUserStore"
 import { useBlogUsers } from "../../stores/blogUserStore"
+import { Link } from "react-router-dom"
 
 const Users = () => {
   const { initialize } = useBlogUsersActions()
@@ -24,7 +24,13 @@ const Users = () => {
             <th>Blogs created</th>
           </tr>
           {users.map((user) => (
-            <User key={user.id} user={user} />
+            <tr key={user.id}>
+              <td>
+                <Link to={`/users/${user.id}`}>{user.name}</Link>
+              </td>
+              <td>{user.username}</td>
+              <td>{user.blogs.length}</td>
+            </tr>
           ))}
         </tbody>
       </table>

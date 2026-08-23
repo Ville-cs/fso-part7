@@ -14,6 +14,7 @@ import ErrorBoundary from "./components/ErrorBoundary"
 import NotFound from "./components/NotFound"
 import Notification from "./components/Notification"
 import Users from "./components/Users"
+import User from "./components/Users/User"
 import blogService from "./services/blogs"
 import { Container, AppBar, Toolbar, Button, Typography } from "@mui/material"
 
@@ -43,8 +44,10 @@ const App = () => {
     navigate("/")
   }
 
-  const match = useMatch("/blogs/:id")
-  const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
+  const blogMatch = useMatch("/blogs/:id")
+  const blog = blogMatch
+    ? blogs.find((blog) => blog.id === blogMatch.params.id)
+    : null
 
   const style = { "&:hover": { bgcolor: "rgba(255,255,255,0.3)" } }
 
@@ -102,6 +105,7 @@ const App = () => {
           <Route path="/blogs" element={<BlogList />} />
           <Route path="/users" element={<Users />} />
           <Route path="/blogs/:id" element={<Blog blog={blog} user={user} />} />
+          <Route path="/users/:id" element={<User />} />
           <Route path="/new" element={<BlogForm blog={blog} />} />
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
